@@ -38,7 +38,7 @@ void Balanceboard::threadedFunction() {
             {
                 std::unique_lock<std::mutex> lock(mutex);
                 const std::string boardname = this->_osc_msg.getAddress();
-                board_id = std::stoi(boardname[5]);
+                board_id = std::stoi(&boardname[5]);
                 for (kk=0; kk<this->_osc_msg.getNumArgs(); kk++)
                 {
                     val = this->_osc_msg.getArgAsFloat(kk);
