@@ -12,14 +12,8 @@
 #include "ofxOsc.h"
 
 struct BalanceData {
-    std::string boardname;
-    float bottom_left;
-    float bottom_right;
-    float top_left;
-    float top_right;
-    float sum;
-    float virtual_x;
-    float virtual_y;
+    float sum[4];
+    float virtual_x[4];
 };
 
 class Balanceboard: public ofThread

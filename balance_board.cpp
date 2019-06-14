@@ -26,7 +26,7 @@ void Balanceboard::stop() {
 
 void Balanceboard::threadedFunction() {
     float val = 0.0f;
-    int kk;
+    int kk, board_id = -1;
 
     while (this->isThreadRunning())
     {
@@ -37,39 +37,25 @@ void Balanceboard::threadedFunction() {
             if (this->_osc_msg.getNumArgs() > 0)
             {
                 std::unique_lock<std::mutex> lock(mutex);
-                this->_buffer.boardname = this->_osc_msg.getAddress();
-
+                string boardname = this->_osc_msg.getAddress();
+                board_id = int(boardname[6]);
                 for (kk=0; kk<this->_osc_msg.getNumArgs(); kk++)
                 {
                     val = this->_osc_msg.getArgAsFloat(kk);
 
                     switch(kk)
                     {
-                        case 0:
-                            this->_buffer.bottom_left = val;
-                            break;
-                        case 1:
-                            this->_buffer.bottom_right = val;
-                            break;
-                        case 2:
-                            this->_buffer.top_left = val;
-                            break;
-                        case 3:
-                            this->_buffer.top_right = val;
-                            break;
                         case 4:
-                            this->_buffer.sum = val;
+                            this->_buffer.sum[board_id] = val;
                             break;
                         case 5:
-                            this->_buffer.virtual_x = val;
-                            break;
-                        case 6:
-                            this->_buffer.virtual_y = val;
+                            this->_buffer.virtual_x[board_id] = val;
                             break;
                         default:
                             break;
                     }
                 }
+                board_id = -1;
             }
             this->_osc_msg.clear();
         }
