@@ -47,9 +47,15 @@ void Balanceboard::threadedFunction() {
                     {
                         case 4:
                             this->_buffer.sum[board_id] = val;
+                            this->_buffer.maxWeight[board_id] = std::max(this->_buffer.maxWeight[board_id], val);
+                            // value that works well as lower threshold to say no user is present
+                            if (val < 0.002) {
+                                this->_buffer.maxWeight[board_id] = 0.0f;
+                            }
                             break;
                         case 5:
                             this->_buffer.virtual_x[board_id] = val;
+                            this->_buffer.norm_x[board_id] = (val-0.5) / this->_buffer.maxWeight[board_id];
                             break;
                         default:
                             break;
