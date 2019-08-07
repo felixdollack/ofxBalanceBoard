@@ -51,7 +51,7 @@ void Balanceboard::threadedFunction() {
                             this->_buffer.maxWeight[board_id] = std::max(this->_buffer.maxWeight[board_id], val);
                             // value that works well as lower threshold to say no user is present
                             if (val < 0.002) {
-                                this->_buffer.maxWeight[board_id] = 0.0f;
+                                this->_buffer.maxWeight[board_id] = 0.001f;
                             }
                             break;
                         case 5:
