@@ -58,6 +58,9 @@ void Balanceboard::threadedFunction() {
                             this->_buffer.virtual_x[board_id] = val;
                             this->_buffer.norm_x[board_id] = (val-0.5) / this->_buffer.maxWeight[board_id];
                             break;
+                        case 6:
+                            this->_buffer.virtual_y[board_id] = val;
+                            this->_buffer.norm_y[board_id] = (val-0.5) / this->_buffer.maxWeight[board_id];
                         default:
                             break;
                     }

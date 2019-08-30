@@ -15,7 +15,9 @@ struct BalanceData {
     float sum[4];
     float maxWeight[4];
     float virtual_x[4];
+    float virtual_y[4];
     float norm_x[4];
+    float norm_y[4];
 };
 
 class Balanceboard: public ofThread
