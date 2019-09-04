@@ -10,8 +10,23 @@ Balanceboard::Balanceboard(int osc_port) {
     this->_osc_port = osc_port;
     this->_receiver = new ofxOscReceiver();
     this->_receiver->setup(this->_osc_port);
-
+    this->needSmoothing = false;
+    this->smoothingParam = 0.0f;
     std::memset(&this->_buffer, 0, sizeof(this->_buffer));
+}
+
+bool Balanceboard::isSmoothing() {
+    return this->needSmoothing;
+}
+
+void Balanceboard::setSmoothing(float value) {
+    if (value > 0.0f) {
+        this->needSmoothing = true;
+        this->smoothingParam = value;
+    } else {
+        this->needSmoothing = false;
+        this->smoothingParam = 0.0f;
+    }
 }
 
 void Balanceboard::start() {
@@ -59,12 +74,20 @@ void Balanceboard::threadedFunction() {
                             }
                             break;
                         case 5:
-                            this->_buffer.virtual_x[board_id] = val;
-                            this->_buffer.norm_x[board_id] = (val-0.5) / this->_buffer.maxWeight[board_id];
+                            if (this->needSmoothing) {
+                                this->_buffer.virtual_x[board_id] = (1-this->smoothingParam) * val + this->smoothingParam * this->_buffer.virtual_x[board_id];
+                            } else {
+                                this->_buffer.virtual_x[board_id] = val;
+                            }
+                            this->_buffer.norm_x[board_id] = (this->_buffer.virtual_x[board_id]-0.5) / this->_buffer.maxWeight[board_id];
                             break;
                         case 6:
-                            this->_buffer.virtual_y[board_id] = val;
-                            this->_buffer.norm_y[board_id] = (val-0.5) / this->_buffer.maxWeight[board_id];
+                            if (this->needSmoothing) {
+                                this->_buffer.virtual_y[board_id] = (1-this->smoothingParam) * val + this->smoothingParam * this->_buffer.virtual_y[board_id];
+                            } else {
+                                this->_buffer.virtual_y[board_id] = val;
+                            }
+                            this->_buffer.norm_y[board_id] = (this->_buffer.virtual_y[board_id]-0.5) / this->_buffer.maxWeight[board_id];
                         default:
                             break;
                     }
