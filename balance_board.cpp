@@ -59,8 +59,10 @@ void Balanceboard::threadedFunction() {
                 {
                     val = this->_osc_msg.getArgAsFloat(kk);
                     if (val < 0.03f) {
-                        // ignore very small values
-                        continue;
+                        if (kk != 4) {
+                            // ignore very small values
+                            continue;
+                        }
                     }
 
                     switch(kk)
@@ -69,8 +71,9 @@ void Balanceboard::threadedFunction() {
                             this->_buffer.sum[board_id] = val;
                             this->_buffer.maxWeight[board_id] = std::max(this->_buffer.maxWeight[board_id], val);
                             // value that works well as lower threshold to say no user is present
-                            if (val < 0.002) {
-                                this->_buffer.maxWeight[board_id] = 0.001f;
+                            if (val < 0.03f) {
+                                this->_buffer.sum[board_id] = 0.02f; // this is smaller than the presence threshold
+                                this->_buffer.maxWeight[board_id] = 0.03f;
                             }
                             break;
                         case 5:
