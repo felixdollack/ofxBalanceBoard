@@ -29,12 +29,16 @@ public:
     void start();
     void stop();
     BalanceData getBalanceData();
+    bool isSmoothing();
+    void setSmoothing(float value);
 
 protected:
     ofxOscReceiver *_receiver;
     ofxOscMessage _osc_msg;
     int _osc_port;
     BalanceData _buffer;
+    bool needSmoothing;
+    float smoothingParam;
 
     void threadedFunction();
     void updateData();
