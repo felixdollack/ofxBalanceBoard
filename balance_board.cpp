@@ -43,6 +43,10 @@ void Balanceboard::threadedFunction() {
                 for (kk=0; kk<this->_osc_msg.getNumArgs(); kk++)
                 {
                     val = this->_osc_msg.getArgAsFloat(kk);
+                    if (val < 0.03f) {
+                        // ignore very small values
+                        continue;
+                    }
 
                     switch(kk)
                     {
